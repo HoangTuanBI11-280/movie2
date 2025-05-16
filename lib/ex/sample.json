@@ -1,0 +1,181 @@
+{
+  "success": true,
+  "data": {
+    "theloai": [
+      {
+        "TenTheLoai": "Chuyển Sinh",
+        "MoTa": null,
+        "ID": "649d6d800631b81a309a9f6e",
+        "Truyen": [
+          {
+            "StoryImage": "https://admin.truyen5sao.com/Pictures/Truyen/Large/64aa34950631ac25c07723e2.jpg",
+            "StoryName": "Hành Giả",
+            "StoryTitleLastChap": "Chapter 5",
+            "StoryID": "64aa34950631ac25c07723e2",
+            "StoryUpdateTime": "3/27/2024 9:34:52 AM",
+            "StoryAuthor": "Đang cập nhật",
+            "StoryNameK": "hanh-gia-1",
+            "StoryView": 16
+          }
+        ]
+      },
+      {
+        "TenTheLoai": "Huyền Huyễn",
+        "MoTa": null,
+        "ID": "649d61c00631b61a30ca324d",
+        "Truyen": [
+          {
+            "StoryImage": "https://admin.truyen5sao.com/Pictures/Truyen/Large/64aa3af50631ac25c0772474.jpg",
+            "StoryName": "Đánh Bại Chư Thiên",
+            "StoryTitleLastChap": "chapter 3",
+            "StoryID": "64aa3af50631ac25c0772474",
+            "StoryUpdateTime": "1/20/2025 9:10:19 AM",
+            "StoryAuthor": "Đang cập nhật",
+            "StoryNameK": "danh-bai-chu-thien",
+            "StoryView": 20
+          }
+        ]
+      },
+      {
+        "TenTheLoai": "Hành Động",
+        "MoTa": null,
+        "ID": "649d5f820631b41a30cffe9a",
+        "Truyen": [
+          {
+            "StoryImage": "https://admin.truyen5sao.com/Pictures/Truyen/Large/64aa2b250631ac25c077230a.jpg",
+            "StoryName": "Kiếm Lâm",
+            "StoryTitleLastChap": "Chapter 2",
+            "StoryID": "64aa2b250631ac25c077230a",
+            "StoryUpdateTime": "12/13/2023 7:04:33 AM",
+            "StoryAuthor": "Đang cập nhật",
+            "StoryNameK": "kiem-lam",
+            "StoryView": 11
+          }
+        ]
+      },
+      {
+        "TenTheLoai": "Kinh Dị",
+        "MoTa": null,
+        "ID": "649d5f820631b41a30cffe9c",
+        "Truyen": [
+          {
+            "StoryImage": "https://admin.truyen5sao.com/Pictures/Truyen/Large/64aa35e40631ac25c0772400.jpg",
+            "StoryName": "Ta Dựa Vào Trộm Mộ Thành Thần",
+            "StoryTitleLastChap": "Chapter 5",
+            "StoryID": "64aa35e40631ac25c0772400",
+            "StoryUpdateTime": "3/27/2024 9:34:35 AM",
+            "StoryAuthor": "Đang cập nhật",
+            "StoryNameK": "ta-dua-vao-trom-mo-thanh-than",
+            "StoryView": 33
+          }
+        ]
+      },
+      {
+        "TenTheLoai": "Ngôn Tình",
+        "MoTa": null,
+        "ID": "649d61870631b61a30ca3238",
+        "Truyen": [
+          {
+            "StoryImage": "https://admin.truyen5sao.com/Pictures/Truyen/Large/64aa2b0f0631ac25c0772308.jpg",
+            "StoryName": "Thạch Thiếu Hiệp Thật Cô Đơn",
+            "StoryTitleLastChap": "Chapter 1",
+            "StoryID": "64aa2b0f0631ac25c0772308",
+            "StoryUpdateTime": "12/13/2023 8:37:09 AM",
+            "StoryAuthor": "Đang cập nhật",
+            "StoryNameK": "thach-thieu-hiep-that-co-don",
+            "StoryView": 70
+          }
+        ]
+      },
+      {
+        "TenTheLoai": "Trọng Sinh",
+        "MoTa": null,
+        "ID": "649d61ec0631b61a30ca325a",
+        "Truyen": [
+          {
+            "StoryImage": "https://admin.truyen5sao.com/Pictures/Truyen/Large/64aa34950631ac25c07723e2.jpg",
+            "StoryName": "Hành Giả",
+            "StoryTitleLastChap": "Chapter 5",
+            "StoryID": "64aa34950631ac25c07723e2",
+            "StoryUpdateTime": "3/27/2024 9:34:52 AM",
+            "StoryAuthor": "Đang cập nhật",
+            "StoryNameK": "hanh-gia-1",
+            "StoryView": 16
+          }
+        ]
+      }
+    ],
+    "gallery": [
+      {
+        "Image": "https://adminfake.nettruyentranh.com/Pictures/GalleryTruyenHot/648fbf8059e2201e3071e27c_1.jpg",
+        "IDTruyen": "648fbf8059e2201e3071e27c",
+        "TenTruyen": "Vũ Cực Thiên Hạ",
+        "TypeID": "0",
+        "DateUpdate": "2024-03-27T16:33:16.006Z",
+        "Id": "6603e7dc0631ac1894077ff8",
+        "MongoId": "6603e7dc0631ac1894077ff8"
+      }
+    ],
+    "moicapnhat": [
+      {
+        "StoryID": "64aa3af50631ac25c0772474",
+        "StoryName": "Đánh Bại Chư Thiên",
+        "StoryImage": "64aa3af50631ac25c0772474.jpg",
+        "StoryUpdateTime": "2025-01-20T09:10:19.457Z",
+        "StoryTitleLastChap": "chapter 3",
+        "NameKLastChap": "danh-bai-chu-thien-chapter-3",
+        "StoryNameK": "danh-bai-chu-thien",
+        "StoryAuthor": "Đang cập nhật",
+        "StoryView": 20,
+        "StoryTrangChuType": 0,
+        "IsKhuyenKhichDoc": 0,
+        "StoryTheLoai": [],
+        "StoryDescription": null,
+        "Id": "678e12fb0631ac28c080b6ea",
+        "MongoId": "678e12fb0631ac28c080b6ea"
+      }
+    ],
+    "truyenhot": [
+      {
+        "StoryID": "64a920cb0631ac36f4d6e7b9",
+        "StoryName": "Phục Thiên Thánh Chủ",
+        "StoryImage": "64a920cb0631ac36f4d6e7b9.jpg",
+        "StoryUpdateTime": "2025-01-20T09:10:19.738Z",
+        "StoryTitleLastChap": "chapter 1",
+        "NameKLastChap": "phuc-thien-thanh-chu-chapter-1",
+        "StoryNameK": "phuc-thien-thanh-chu-1",
+        "StoryAuthor": "Đang cập nhật",
+        "StoryView": 446,
+        "StoryTrangChuType": 3,
+        "IsKhuyenKhichDoc": 0,
+        "StoryTheLoai": [],
+        "StoryDescription": null,
+        "Id": "678e12fb0631ac28c080b746",
+        "MongoId": "678e12fb0631ac28c080b746"
+      }
+    ],
+    "sanpham": [],
+    "video": [],
+    "review": [],
+    "theodoichuadoc": 0,
+    "thongbaomoi": 0,
+    "version": "3.0.1",
+    "version_number": 1,
+    "updatesense": [
+      {
+        "system": "android",
+        "version_number": 25,
+        "versionname": "3.2.5",
+        "sense": "Update bổ sung nhiệm vụ",
+        "iboqua": false
+      },
+      {
+        "system": "ios",
+        "version_number": 25,
+        "versionname": "3.2.5",
+        "sense": "Update bổ sung nhiệm vụ",
+        "iboqua": false
+      }
+    ]
+  }
+}
