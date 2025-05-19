@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
@@ -30,25 +29,27 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var jsonList;
+  List? jsonList; // Danh sách truyện
+
   @override
   void initState() {
+    super.initState();
     getData();
   }
 
   void getData() async {
     try {
-      var response = await Dio()
-          .get('https://protocoderspoint.com/jsondata/superheros.json');
+      var response = await Dio().get('https://api.jsonbin.io/v3/b/682a9b598561e97a5016eda6');
       if (response.statusCode == 200) {
         setState(() {
-          jsonList = response.data['superheros'] as List;
+          // Lấy danh sách các thể loại và truyện
+          jsonList = response.data['record']['data']['theloai'];
         });
       } else {
-        print(response.statusCode);
+        print('Error: ${response.statusCode}');
       }
     } catch (e) {
-      print(e);
+      print('Error: $e');
     }
   }
 
@@ -57,29 +58,37 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'GeeksForGeeks',
+          'Danh Sách Thể Loại Truyện',
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
       ),
-      body: ListView.builder(
-          itemCount: jsonList == null ? 0 : jsonList.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Card(
-                child: ListTile(
-              leading: ClipRRect(
-                borderRadius: BorderRadius.circular(80),
-                child: Image.network(
-                  jsonList[index]['url'],
-                  fit: BoxFit.fill,
-                  width: 50,
-                  height: 50,
-                ),
-              ),
-              title: Text(jsonList[index]['name']),
-              subtitle: Text(jsonList[index]['power']),
-            ));
-          }),
+      body: jsonList == null
+          ? Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: jsonList!.length,
+              itemBuilder: (BuildContext context, int index) {
+                var category = jsonList![index];
+                return ExpansionTile(
+                  title: Text(category['TenTheLoai'] ?? "Thể Loại Không Xác Định"),
+                  children: (category['Truyen'] as List).map((story) {
+                    return ListTile(
+                      leading: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Image.network(
+                          story['StoryImage'],
+                          fit: BoxFit.cover,
+                          width: 50,
+                          height: 50,
+                        ),
+                      ),
+                      title: Text(story['StoryName']),
+                      subtitle: Text(story['StoryTitleLastChap']),
+                    );
+                  }).toList(),
+                );
+              },
+            ),
     );
   }
 }
