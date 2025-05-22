@@ -1,6 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:movie2/helper/responsive.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,7 +29,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List? jsonList; // Danh sách truyện
+  List? categories; // Dữ liệu của "theloai"
+  List? gallery; // Dữ liệu của "gallery"
+  List? latestUpdates; // Dữ liệu của "moicapnhat"
+  List? hotStories; // Dữ liệu của "truyenhot"
 
   @override
   void initState() {
@@ -39,11 +42,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void getData() async {
     try {
-      var response = await Dio().get('https://api.jsonbin.io/v3/b/682a9b598561e97a5016eda6');
+      var response = await Dio()
+          .get('https://api.jsonbin.io/v3/b/682b02398561e97a50172628');
       if (response.statusCode == 200) {
         setState(() {
-          // Lấy danh sách các thể loại và truyện
-          jsonList = response.data['record']['data']['theloai'];
+          var data = response.data['record']['data'];
+          categories = data['theloai'];
+          gallery = data['gallery'];
+          latestUpdates = data['moicapnhat'];
+          hotStories = data['truyenhot'];
         });
       } else {
         print('Error: ${response.statusCode}');
@@ -55,40 +62,124 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final responsive = ResponsiveUtil(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Danh Sách Thể Loại Truyện',
-          style: TextStyle(color: Colors.white),
+        title: const Text(
+          'Danh Sách Nội Dung',
+          style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
       ),
-      body: jsonList == null
-          ? Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: jsonList!.length,
-              itemBuilder: (BuildContext context, int index) {
-                var category = jsonList![index];
-                return ExpansionTile(
-                  title: Text(category['TenTheLoai'] ?? "Thể Loại Không Xác Định"),
-                  children: (category['Truyen'] as List).map((story) {
-                    return ListTile(
-                      leading: ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: Image.network(
-                          story['StoryImage'],
-                          fit: BoxFit.cover,
-                          width: 50,
-                          height: 50,
-                        ),
-                      ),
-                      title: Text(story['StoryName']),
-                      subtitle: Text(story['StoryTitleLastChap']),
-                    );
-                  }).toList(),
-                );
-              },
+      body: categories == null
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Hiển thị danh sách thể loại
+                  _buildCategorySection(responsive),
+
+                  // Hiển thị Gallery
+                  _buildGallerySection(),
+
+                  // Hiển thị danh sách truyện mới cập nhật
+                  _buildLatestUpdatesSection(),
+
+                  // Hiển thị danh sách truyện hot
+                  _buildHotStoriesSection(),
+                ],
+              ),
             ),
+    );
+  }
+
+  Widget _buildCategorySection(ResponsiveUtil responsive) {
+    return ExpansionTile(
+      title: const Text(
+        "Thể Loại Truyện",
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      ),
+      children: categories!.map((category) {
+        return ListTile(
+          title: Text(category['TenTheLoai'] ?? "Thể loại không xác định"),
+          subtitle: Text("Số truyện: ${category['Truyen']?.length ?? 0}"),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildGallerySection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+            "Gallery",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: gallery!.map((item) {
+              return Card(
+                child: Column(
+                  children: [
+                    Image.network(item['Image'], width: 100, height: 100),
+                    Text(item['TenTruyen']),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLatestUpdatesSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+            "Truyện Mới Cập Nhật",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
+        ...latestUpdates!.map((story) {
+          return ListTile(
+            leading: Image.network(story['StoryImage'], width: 50, height: 50),
+            title: Text(story['StoryName']),
+            subtitle: Text("Chương mới nhất: ${story['StoryTitleLastChap']}"),
+          );
+        }).toList(),
+      ],
+    );
+  }
+
+  Widget _buildHotStoriesSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+            "Truyện Hot",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
+        ...hotStories!.map((story) {
+          return ListTile(
+            leading: Image.network(story['StoryImage'], width: 50, height: 50),
+            title: Text(story['StoryName']),
+            subtitle: Text("Lượt xem: ${story['StoryView']}"),
+          );
+        }).toList(),
+      ],
     );
   }
 }

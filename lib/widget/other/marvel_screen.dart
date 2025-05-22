@@ -87,6 +87,33 @@ class TheMarvel extends StatelessWidget {
               ],
             ),
           ),
+          SizedBox(
+            height: responsive.isMobile()
+                ? responsive.width(30)
+                : responsive.width(20),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: responsive.isMobile()
+                  ? responsive.width(1)
+                  : responsive.width(1),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.play_circle_outline_outlined,
+                    color: Colors.white,
+                    size: responsive.isMobile()
+                        ? responsive.width(40)
+                        : responsive.width(20),
+                  ),
+                )
+              ],
+            ),
+          ),
           SizedBox(height: 8),
           Padding(
             padding: EdgeInsets.only(
