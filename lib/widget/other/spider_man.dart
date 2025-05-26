@@ -1,11 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:dio/dio.dart'; // Thêm thư viện Dio để gọi API
 import 'package:movie2/helper/responsive.dart';
 
-class SpiderMan extends StatelessWidget {
+class SpiderMan extends StatefulWidget {
+  @override
+  State<SpiderMan> createState() => _SpiderManState();
+}
+
+class _SpiderManState extends State<SpiderMan> {
+  List<Map<String, dynamic>>? stories;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchImages(); // Gọi API khi khởi tạo
+  }
+
+  void fetchImages() async {
+    try {
+      var response = await Dio()
+          .get('https://api.jsonbin.io/v3/b/6833e0168960c979a5a12517');
+      if (response.statusCode == 200) {
+        setState(() {
+          // Lấy danh sách truyện từ JSON
+          stories =
+              (response.data['record']['data']['theloai'][0]['Truyen'] as List)
+                  .map<Map<String, dynamic>>(
+                      (story) => story as Map<String, dynamic>)
+                  .toList();
+        });
+      } else {
+        print("Error: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Error fetching images: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final responsive = ResponsiveUtil(context);
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -25,17 +61,25 @@ class SpiderMan extends StatelessWidget {
                         "SPIDER-MAN",
                         style: GoogleFonts.leagueGothic(
                           color: Colors.white,
-                          fontSize: 25,
+                          fontSize: responsive.isMobile()
+                              ? responsive.width(12)
+                              : responsive.width(8),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(
+                      height: responsive.isMobile()
+                          ? responsive.width(3)
+                          : responsive.width(20),
+                    ),
                     Text(
                       "Across the Spider-Verse",
                       style: GoogleFonts.leagueGothic(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: responsive.isMobile()
+                            ? responsive.width(6)
+                            : responsive.width(20),
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -52,7 +96,9 @@ class SpiderMan extends StatelessWidget {
                       icon: Icon(
                         Icons.download,
                         color: Colors.white,
-                        size: 28,
+                        size: responsive.isMobile()
+                            ? responsive.width(10)
+                            : responsive.width(20),
                       ),
                     ),
                     IconButton(
@@ -62,7 +108,9 @@ class SpiderMan extends StatelessWidget {
                       icon: Icon(
                         Icons.shopping_cart_outlined,
                         color: Colors.white,
-                        size: 28,
+                        size: responsive.isMobile()
+                            ? responsive.width(10)
+                            : responsive.width(20),
                       ),
                     ),
                   ],
@@ -72,7 +120,11 @@ class SpiderMan extends StatelessWidget {
           ),
           SizedBox(height: 8),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: EdgeInsets.symmetric(
+              horizontal: responsive.isMobile()
+                  ? responsive.width(3)
+                  : responsive.width(20),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -80,7 +132,9 @@ class SpiderMan extends StatelessWidget {
                   "2h 20m",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 16,
+                    fontSize: responsive.isMobile()
+                        ? responsive.width(8)
+                        : responsive.width(5),
                   ),
                 ),
               ],
@@ -88,7 +142,7 @@ class SpiderMan extends StatelessWidget {
           ),
           SizedBox(
             height: responsive.isMobile()
-                ? responsive.width(30)
+                ? responsive.width(20)
                 : responsive.width(20),
           ),
           Padding(
@@ -116,14 +170,15 @@ class SpiderMan extends StatelessWidget {
           SizedBox(
             height: responsive.isMobile()
                 ? responsive.width(20)
-                : responsive.width(8),
+                : responsive.width(20),
           ),
           Padding(
             padding: EdgeInsets.only(
-                left: responsive.width(2)), // Thêm khoảng cách bên phải
+              left: responsive.isMobile()
+                  ? responsive.width(3)
+                  : responsive.width(20),
+            ),
             child: Row(
-              mainAxisAlignment:
-                  MainAxisAlignment.spaceBetween, // Căn đều 2 bên
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,178 +200,105 @@ class SpiderMan extends StatelessWidget {
                     Container(
                       height: responsive.height(0.3),
                       width: responsive.width(10),
-                      color: Colors.white, // Màu sắc đường gạch chân
+                      color: Colors.white,
                     ),
                   ],
                 ),
               ],
             ),
           ),
-          SizedBox(
-            height: responsive.isMobile()
-                ? responsive.width(10)
-                : responsive.width(8),
-          ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                for (int i = 1; i <= 4; i++)
-                  Padding(
-                    padding: EdgeInsets.only(left: 10),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: Image.asset(
-                        "assets/images/marvelstudio/spider$i.png",
-                        height: responsive.isMobile()
-                            ? responsive.width(90)
-                            : responsive.width(50),
-                        width: responsive.isMobile()
-                            ? responsive.width(60)
-                            : responsive.width(30),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+          SizedBox(height: responsive.width(10)),
+
+          // Phần hiển thị danh sách truyện
+          stories == null
+              ? Center(
+                  child:
+                      CircularProgressIndicator()) // Hiển thị khi chờ dữ liệu
+              : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: stories!.map((story) {
+                      return Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Stack(
+                          children: [
+                            // Hình ảnh chính
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Image.network(
+                                story['StoryImage'], // URL hình ảnh
+                                height: responsive.isMobile()
+                                    ? responsive.width(90)
+                                    : responsive.width(50),
+                                width: responsive.isMobile()
+                                    ? responsive.width(60)
+                                    : responsive.width(30),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+
+                            // Nền mờ đen phía dưới
+                            Positioned(
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 10),
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      Colors.black.withOpacity(0.8),
+                                      Colors.black.withOpacity(0.8),
+                                    ],
+                                  ),
+                                  borderRadius: const BorderRadius.vertical(
+                                    bottom: Radius.circular(15),
+                                  ),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    // Tên phụ đề
+                                    Text(
+                                      story['StoryName'], // Tên truyện
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: responsive.isMobile()
+                                            ? responsive.width(5)
+                                            : responsive.width(3.5),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+
+                                    // Tên chính (ví dụ: Tên phim hoặc tiêu đề phụ)
+                                    Text(
+                                      "Update: ${story['UpdateTime'] ?? "Không rõ"}", // Phụ đề
+                                      style: TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: responsive.isMobile()
+                                            ? responsive.width(4)
+                                            : responsive.width(2.8),
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
                   ),
-              ],
-            ),
-          ),
+                ),
         ],
       ),
     );
   }
 }
-
-// import 'package:flutter/material.dart';
-// import 'package:google_fonts/google_fonts.dart';
-// import 'package:dio/dio.dart';
-
-// class SpiderMan extends StatelessWidget {
-//   // Tạo một đối tượng Dio
-//   final Dio dio = Dio();
-
-//   // Hàm lấy dữ liệu từ API
-//   Future<Map<String, dynamic>> fetchMovieDetails() async {
-//     final url = "https://b0ynhanghe0.github.io/data%20fake/trangchu.json";
-
-//     try {
-//       // Gửi yêu cầu GET bằng Dio
-//       final response = await dio.get(url);
-
-//       // Kiểm tra trạng thái HTTP
-//       if (response.statusCode == 200) {
-//         return response.data; // Trả về dữ liệu JSON dạng Map
-//       } else {
-//         throw Exception("Failed to load movie details: ${response.statusCode}");
-//       }
-//     } catch (e) {
-//       throw Exception("Error fetching movie details: $e");
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return FutureBuilder<Map<String, dynamic>>(
-//       future: fetchMovieDetails(),
-//       builder: (context, snapshot) {
-//         if (snapshot.connectionState == ConnectionState.waiting) {
-//           return Center(child: CircularProgressIndicator());
-//         } else if (snapshot.hasError) {
-//           return Center(child: Text("Error: ${snapshot.error}"));
-//         } else {
-//           final movieDetails = snapshot.data!;
-//           return SingleChildScrollView(
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Padding(
-//                   padding: EdgeInsets.symmetric(horizontal: 10),
-//                   child: Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                     children: [
-//                       Column(
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: [
-//                           Transform(
-//                             transform: Matrix4.identity()..scale(1.5, 1.2),
-//                             child: Text(
-//                               movieDetails["title"] ?? "SPIDER-MAN",
-//                               style: GoogleFonts.leagueGothic(
-//                                 color: Colors.white,
-//                                 fontSize: 25,
-//                                 fontWeight: FontWeight.bold,
-//                               ),
-//                             ),
-//                           ),
-//                           SizedBox(height: 4),
-//                           Text(
-//                             movieDetails["subtitle"] ?? "Across the Spider-Verse",
-//                             style: GoogleFonts.leagueGothic(
-//                               color: Colors.white,
-//                               fontSize: 16,
-//                               fontWeight: FontWeight.w400,
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                       Row(
-//                         children: [
-//                           IconButton(
-//                             onPressed: () {
-//                               // TODO: Handle download action
-//                             },
-//                             icon: Icon(
-//                               Icons.download,
-//                               color: Colors.white,
-//                               size: 28,
-//                             ),
-//                           ),
-//                           IconButton(
-//                             onPressed: () {
-//                               // TODO: Handle cart action
-//                             },
-//                             icon: Icon(
-//                               Icons.shopping_cart_outlined,
-//                               color: Colors.white,
-//                               size: 28,
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//                 SizedBox(height: 8),
-//                 Padding(
-//                   padding: EdgeInsets.symmetric(horizontal: 16),
-//                   child: Column(
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: [
-//                       Text(
-//                         movieDetails["duration"] ?? "Unknown duration",
-//                         style: TextStyle(
-//                           color: Colors.white,
-//                           fontSize: 16,
-//                         ),
-//                       ),
-//                       SizedBox(height: 16),
-//                       Text(
-//                         movieDetails["description"] ?? "No description available",
-//                         style: TextStyle(
-//                           color: Colors.white70,
-//                           fontSize: 14,
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           );
-//         }
-//       },
-//     );
-//   }
-// }
-
-

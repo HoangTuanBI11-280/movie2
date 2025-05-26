@@ -1,0 +1,93 @@
+{
+    "success": true,
+    "data": {
+        "theloai": [
+            {
+                "TenTheLoai": "SpiderMan",
+                "MoTa": null,
+                "ID": "i2s1souvvuakre5t24q3qf7t",
+                "Truyen": [
+                    {
+                        "StoryImage": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/images/marvelstudio/spider1.png",
+                        "StoryName": "Spider-Man: Into The Spider-Verse",
+                        "Numberofepisodes": "1",
+                        "UpdateTime": "08/25/2025 9:30:12 AM",
+                        "Author": "Đang cập nhật",
+                        "NameK": "spider-man-1",
+                        "View": 1
+                    },
+                    {
+                        "StoryImage": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/images/marvelstudio/spider2.png",
+                        "StoryName": "Spider-Man: No Way Home",
+                        "Numberofepisodes": "1",
+                        "UpdateTime": "10/16/2025 9:30:12 AM",
+                        "Author": "Đang cập nhật",
+                        "NameK": "spider-man-2",
+                        "View": 1
+                    },
+                    {
+                        "StoryImage": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/images/marvelstudio/spider3.png",
+                        "StoryName": "Spider-Man: Home Coming",
+                        "Numberofepisodes": "1",
+                        "UpdateTime": "11/09/2025 9:30:12 AM",
+                        "Author": "Đang cập nhật",
+                        "NameK": "spider-man-3",
+                        "View": 1
+                    },
+                    {
+                        "StoryImage": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/images/marvelstudio/spider4.png",
+                        "StoryName": "Spider-Man: Across The Spider-Verse ",
+                        "Numberofepisodes": "1",
+                        "UpdateTime": "11/24/2025 9:30:12 AM",
+                        "Author": "Đang cập nhật",
+                        "NameK": "spider-man-4",
+                        "View": 1
+                    }
+                ]
+            },
+            {
+                "TenTheLoai": "The Marvel",
+                "MoTa": null,
+                "ID": "i2s1souvvuakre5t24q3qf7t",
+                "Truyen": [
+                    {
+                        "StoryImage": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/images/marvelstudio/image5.png",
+                        "StoryName": "Black Panther: Wakanda Forever",
+                        "Numberofepisodes": "1",
+                        "UpdateTime": "08/25/2025 9:30:12 AM",
+                        "Author": "Đang cập nhật",
+                        "NameK": "blank-panther",
+                        "View": 1
+                    },
+                    {
+                        "StoryImage": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/images/marvelstudio/image6.png",
+                        "StoryName": "Ant-Man Wasp: Quantumania",
+                        "Numberofepisodes": "1",
+                        "UpdateTime": "10/16/2025 9:30:12 AM",
+                        "Author": "Đang cập nhật",
+                        "NameK": "ant-man",
+                        "View": 1
+                    },
+                    {
+                        "StoryImage": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/images/marvelstudio/image7.png",
+                        "StoryName": "Shang-Chi and the legend of the ten ring",
+                        "Numberofepisodes": "1",
+                        "UpdateTime": "11/09/2025 9:30:12 AM",
+                        "Author": "Đang cập nhật",
+                        "NameK": "shang-chi",
+                        "View": 1
+                    },
+                    {
+                        "StoryImage": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/images/marvelstudio/image8.png",
+                        "StoryName": "Enternals",
+                        "Numberofepisodes": "1",
+                        "UpdateTime": "11/24/2025 9:30:12 AM",
+                        "Author": "Đang cập nhật",
+                        "NameK": "enternals",
+                        "View": 1
+                    }
+                ]
+            }
+        ]
+    }
+}

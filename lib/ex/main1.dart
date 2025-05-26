@@ -29,6 +29,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  List? jsonList; // Danh sách truyện
+  List<bool>? expandedStates; // Danh sách trạng thái mở rộng
   List? categories; // Dữ liệu của "theloai"
   List? gallery; // Dữ liệu của "gallery"
   List? latestUpdates; // Dữ liệu của "moicapnhat"
@@ -46,6 +48,9 @@ class _MyHomePageState extends State<MyHomePage> {
           .get('https://api.jsonbin.io/v3/b/682b02398561e97a50172628');
       if (response.statusCode == 200) {
         setState(() {
+          jsonList = response.data['record']['data']['theloai'];
+          expandedStates = List<bool>.filled(
+              jsonList!.length, false); // Khởi tạo trạng thái mở rộng
           var data = response.data['record']['data'];
           categories = data['theloai'];
           gallery = data['gallery'];
@@ -95,17 +100,65 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildCategorySection(ResponsiveUtil responsive) {
-    return ExpansionTile(
-      title: const Text(
-        "Thể Loại Truyện",
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-      ),
-      children: categories!.map((category) {
-        return ListTile(
-          title: Text(category['TenTheLoai'] ?? "Thể loại không xác định"),
-          subtitle: Text("Số truyện: ${category['Truyen']?.length ?? 0}"),
-        );
-      }).toList(),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+            "Thể Loại Truyện",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
+        SizedBox(
+          height: 400, // Cố định chiều cao để tránh lỗi hiển thị
+          child: ListView.builder(
+            itemCount: jsonList!.length,
+            itemBuilder: (BuildContext context, int index) {
+              var category = jsonList![index];
+              return ExpansionTile(
+                key: Key('$index'), // Đảm bảo mỗi mục có khóa duy nhất
+                title: Text(
+                  category['TenTheLoai'] ?? "Thể Loại Không Xác Định",
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                initiallyExpanded: expandedStates![index],
+                onExpansionChanged: (bool expanded) {
+                  setState(() {
+                    expandedStates![index] = expanded;
+                  });
+                },
+                children: (category['Truyen'] as List).map((story) {
+                  return ListTile(
+                    leading: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.network(
+                        story['StoryImage'],
+                        fit: BoxFit.fill,
+                        width: responsive.isMobile()
+                            ? responsive.width(40)
+                            : responsive.width(20),
+                        height: responsive.isMobile()
+                            ? responsive.width(40)
+                            : responsive.width(20),
+                      ),
+                    ),
+                    title: Text(story['StoryName']),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(story['StoryTitleLastChap']),
+                        Text("Cập nhật: ${story['StoryUpdateTime']}"),
+                        Text("Lượt xem: ${story['StoryView']}"),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 

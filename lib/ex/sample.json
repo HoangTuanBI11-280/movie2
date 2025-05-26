@@ -178,9 +178,9 @@
     ],
     "moicapnhat": [
       {
-        "StoryID": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/draft/danh_bai_chu_thien.png",
+        "StoryID": "64aa3af50631ac25c0772474",
         "StoryName": "Đánh Bại Chư Thiên",
-        "StoryImage": "64aa3af50631ac25c0772474.jpg",
+        "StoryImage": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/draft/danh_bai_chu_thien.png",
         "StoryUpdateTime": "2025-01-20T09:10:19.457Z",
         "StoryTitleLastChap": "chapter 3",
         "NameKLastChap": "danh-bai-chu-thien-chapter-3",
@@ -199,7 +199,7 @@
       {
         "StoryID": "64a920cb0631ac36f4d6e7b9",
         "StoryName": "Phục Thiên Thánh Chủ",
-        "StoryImage": "64a920cb0631ac36f4d6e7b9.jpg",
+        "StoryImage": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/draft/phuc_thien.png",
         "StoryUpdateTime": "2025-01-20T09:10:19.738Z",
         "StoryTitleLastChap": "chapter 1",
         "NameKLastChap": "phuc-thien-thanh-chu-chapter-1",
