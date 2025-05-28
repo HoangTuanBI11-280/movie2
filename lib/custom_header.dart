@@ -72,11 +72,11 @@ class _CustomHeaderState extends State<CustomHeader> {
         responsive.isMobile() ? responsive.width(8) : responsive.width(5);
 
     final List<Map<String, dynamic>> menuItems = [
-      {
-        "icon": Icons.home,
-        "title": "Home",
-        "route": HomeScreen.routeName,
-      },
+      // {
+      //   "icon": Icons.home,
+      //   "title": "Home",
+      //   "route": HomeScreen.routeName,
+      // },
       {
         "icon": Icons.menu_book_sharp,
         "title": "Comics",

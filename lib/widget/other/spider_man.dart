@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dio/dio.dart'; // Thêm thư viện Dio để gọi API
 import 'package:movie2/helper/responsive.dart';
+import 'package:video_player/video_player.dart';
 
 class SpiderMan extends StatefulWidget {
   @override
@@ -10,6 +11,9 @@ class SpiderMan extends StatefulWidget {
 
 class _SpiderManState extends State<SpiderMan> {
   List<Map<String, dynamic>>? stories;
+  String? videoUrl; // URL video
+  VideoPlayerController? _videoController;
+  bool isVideoVisible = false; // Biến trạng thái để ẩn/hiển video
 
   @override
   void initState() {
@@ -29,6 +33,7 @@ class _SpiderManState extends State<SpiderMan> {
                   .map<Map<String, dynamic>>(
                       (story) => story as Map<String, dynamic>)
                   .toList();
+          videoUrl = response.data['record']['data']['Vid'][0]['Video'];
         });
       } else {
         print("Error: ${response.statusCode}");
@@ -36,6 +41,42 @@ class _SpiderManState extends State<SpiderMan> {
     } catch (e) {
       print("Error fetching images: $e");
     }
+  }
+
+  void playVideo() {
+    if (videoUrl != null) {
+      _videoController = VideoPlayerController.network(videoUrl!)
+        ..initialize().then((_) {
+          setState(() {
+            isVideoVisible = true;
+          });
+          _videoController!.play();
+        });
+    } else {
+      print("Video URL is null");
+    }
+  }
+
+  void stopVideo() {
+    if (_videoController != null && _videoController!.value.isPlaying) {
+      _videoController!.pause();
+    }
+  }
+
+  void closeVideo() {
+    if (_videoController != null) {
+      _videoController!.dispose();
+      setState(() {
+        _videoController = null;
+        isVideoVisible = false; // Ẩn video
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _videoController?.dispose(); // Giải phóng bộ nhớ
+    super.dispose();
   }
 
   @override
@@ -155,7 +196,9 @@ class _SpiderManState extends State<SpiderMan> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    playVideo();
+                  },
                   icon: Icon(
                     Icons.play_circle_outline_outlined,
                     color: Colors.white,
@@ -163,7 +206,64 @@ class _SpiderManState extends State<SpiderMan> {
                         ? responsive.width(40)
                         : responsive.width(20),
                   ),
-                )
+                ),
+                if (isVideoVisible)
+                  Center(
+                    child: Stack(
+                      children: [
+                        AspectRatio(
+                          aspectRatio: _videoController!.value.aspectRatio,
+                          child: VideoPlayer(_videoController!),
+                        ),
+                        Positioned.fill(
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    if (_videoController != null) {
+                                      if (_videoController!.value.isPlaying) {
+                                        stopVideo(); // Dừng video nếu đang phát
+                                      } else {
+                                        _videoController!
+                                            .play(); // Phát video nếu đang dừng
+                                      }
+                                    }
+                                  },
+                                  icon: Icon(
+                                    _videoController != null &&
+                                            _videoController!.value.isPlaying
+                                        ? Icons.pause // Hiển thị nút Stop
+                                        : Icons.play_arrow, // Hiển thị nút Play
+                                    color: Colors.white,
+                                    size: responsive.isMobile()
+                                        ? responsive.width(10)
+                                        : responsive.width(20),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Positioned.fill(
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                IconButton(
+                                  onPressed: closeVideo,
+                                  icon: Icon(Icons.close, color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
               ],
             ),
           ),

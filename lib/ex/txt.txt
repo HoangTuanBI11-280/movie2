@@ -1,0 +1,173 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:dio/dio.dart';
+import 'package:movie2/helper/responsive.dart';
+import 'package:video_player/video_player.dart'; // Thêm thư viện video_player
+
+class SpiderMan extends StatefulWidget {
+  @override
+  State<SpiderMan> createState() => _SpiderManState();
+}
+
+class _SpiderManState extends State<SpiderMan> {
+  List<Map<String, dynamic>>? stories;
+  String? videoUrl; // URL video
+  VideoPlayerController? _videoController;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchImages(); // Gọi API khi khởi tạo
+  }
+
+  void fetchImages() async {
+    try {
+      var response = await Dio()
+          .get('https://api.jsonbin.io/v3/b/6833e0168960c979a5a12517');
+      if (response.statusCode == 200) {
+        setState(() {
+          // Lấy danh sách truyện từ JSON
+          stories =
+              (response.data['record']['data']['theloai'][0]['Truyen'] as List)
+                  .map<Map<String, dynamic>>(
+                      (story) => story as Map<String, dynamic>)
+                  .toList();
+
+          // Lấy URL video
+          videoUrl = response.data['record']['data']['Vid'][0]['Video'];
+        });
+      } else {
+        print("Error: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Error fetching images: $e");
+    }
+  }
+
+  void playVideo() {
+    if (videoUrl != null) {
+      _videoController = VideoPlayerController.network(videoUrl!)
+        ..initialize().then((_) {
+          setState(() {}); // Cập nhật lại giao diện
+          _videoController!.play();
+        });
+    } else {
+      print("Video URL is null");
+    }
+  }
+
+  @override
+  void dispose() {
+    _videoController?.dispose(); // Giải phóng bộ nhớ
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final responsive = ResponsiveUtil(context);
+
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Tiêu đề Spider-Man
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Transform(
+                      transform: Matrix4.identity()..scale(1.5, 1.2),
+                      child: Text(
+                        "SPIDER-MAN",
+                        style: GoogleFonts.leagueGothic(
+                          color: Colors.white,
+                          fontSize: responsive.isMobile()
+                              ? responsive.width(12)
+                              : responsive.width(8),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: responsive.isMobile()
+                          ? responsive.width(3)
+                          : responsive.width(20),
+                    ),
+                    Text(
+                      "Across the Spider-Verse",
+                      style: GoogleFonts.leagueGothic(
+                        color: Colors.white,
+                        fontSize: responsive.isMobile()
+                            ? responsive.width(6)
+                            : responsive.width(20),
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 8),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: responsive.isMobile()
+                  ? responsive.width(3)
+                  : responsive.width(20),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "2h 20m",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: responsive.isMobile()
+                        ? responsive.width(8)
+                        : responsive.width(5),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: responsive.isMobile()
+                ? responsive.width(20)
+                : responsive.width(20),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: responsive.isMobile()
+                  ? responsive.width(1)
+                  : responsive.width(1),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                IconButton(
+                  onPressed: playVideo,
+                  icon: Icon(
+                    Icons.play_circle_outline_outlined,
+                    color: Colors.white,
+                    size: responsive.isMobile()
+                        ? responsive.width(40)
+                        : responsive.width(20),
+                  ),
+                ),
+                if (_videoController != null && _videoController!.value.isInitialized)
+                  AspectRatio(
+                    aspectRatio: _videoController!.value.aspectRatio,
+                    child: VideoPlayer(_videoController!),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

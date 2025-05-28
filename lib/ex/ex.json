@@ -88,6 +88,15 @@
                     }
                 ]
             }
+        ],
+        "Vid":[
+            {
+                "Video": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/draft/spider_sample.mp4",
+                "VideoName": "Spider-Man",
+                "VideoID": "8e7cfxr8qxzamrkn9djsgyyv",
+                "VideoUpdate": "01/01/2025",
+                "Author":"Đang cập nhật"
+            }
         ]
     }
 }
