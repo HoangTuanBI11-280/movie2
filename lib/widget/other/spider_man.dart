@@ -44,24 +44,26 @@ class _SpiderManState extends State<SpiderMan> {
   }
 
   void playVideo() {
-    if (videoUrl != null) {
-      _videoController = VideoPlayerController.network(videoUrl!)
-        ..initialize().then((_) {
-          setState(() {
-            isVideoVisible = true;
-          });
-          _videoController!.play();
+  if (videoUrl != null) {
+    _videoController = VideoPlayerController.network(videoUrl!)
+      ..initialize().then((_) {
+        setState(() {
+          isVideoVisible = true;
         });
-    } else {
-      print("Video URL is null");
-    }
+        _videoController!.play();
+      });
+  } else {
+    print("Video URL is null");
   }
+}
 
   void stopVideo() {
-    if (_videoController != null && _videoController!.value.isPlaying) {
-      _videoController!.pause();
-    }
+  if (_videoController != null && _videoController!.value.isPlaying) {
+    _videoController!.pause();
+    setState(() {}); // Cập nhật lại giao diện
   }
+}
+
 
   void closeVideo() {
     if (_videoController != null) {
@@ -230,6 +232,7 @@ class _SpiderManState extends State<SpiderMan> {
                                         _videoController!
                                             .play(); // Phát video nếu đang dừng
                                       }
+                                      setState(() {}); // Cập nhật lại giao diện
                                     }
                                   },
                                   icon: Icon(
