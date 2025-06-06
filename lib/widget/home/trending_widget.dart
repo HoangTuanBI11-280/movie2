@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:movie2/helper/responsive.dart';
+import 'package:movie2/screen/avenger_united_screen.dart';
+import 'package:movie2/screen/loki_screen.dart';
+import 'package:movie2/screen/marvel_voice_screen.dart';
 import 'package:movie2/screen/spider_screen.dart';
+import 'package:dio/dio.dart';
+import 'package:movie2/screen/what_if_screen.dart';
 
 class TrendingWidget extends StatefulWidget {
   @override
@@ -11,6 +16,9 @@ class TrendingWidget extends StatefulWidget {
 class _TrendingWidgetState extends State<TrendingWidget>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  List<Map<String, dynamic>>? trendingMovies;
+  List<Map<String, dynamic>>? trendingTVSeries;
+  List<Map<String, dynamic>>? trendingComic;
 
   @override
   void initState() {
@@ -21,6 +29,35 @@ class _TrendingWidgetState extends State<TrendingWidget>
     );
     _tabController.addListener(_handleTabSelection);
     super.initState();
+    fetchTrendingItems();
+  }
+
+  void fetchTrendingItems() async {
+    try {
+      var response = await Dio()
+          .get('https://api.jsonbin.io/v3/b/6833e0168960c979a5a12517');
+      if (response.statusCode == 200) {
+        setState(() {
+          var trendingData = response.data['record']['data']['Trending'];
+          trendingMovies = (trendingData.firstWhere(
+                  (item) => item['Type'] == 'Movie')['Movie'] as List)
+              .map<Map<String, dynamic>>((item) => item as Map<String, dynamic>)
+              .toList();
+          trendingTVSeries = (trendingData.firstWhere(
+                  (item) => item['Type'] == 'TV Series')['TVSeries'] as List)
+              .map<Map<String, dynamic>>((item) => item as Map<String, dynamic>)
+              .toList();
+          trendingComic = (trendingData.firstWhere(
+                  (item) => item['Type'] == 'Comic')['Comic'] as List)
+              .map<Map<String, dynamic>>((item) => item as Map<String, dynamic>)
+              .toList();
+        });
+      } else {
+        print("Error: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Error fetching images: $e");
+    }
   }
 
   _handleTabSelection() {
@@ -60,11 +97,6 @@ class _TrendingWidgetState extends State<TrendingWidget>
                 ),
               ),
               SizedBox(height: 4),
-              Container(
-                height: responsive.height(0.3),
-                width: responsive.width(10),
-                color: Colors.white,
-              ),
             ],
           ),
         ),
@@ -120,40 +152,26 @@ class _TrendingWidgetState extends State<TrendingWidget>
           height:
               responsive.isMobile() ? responsive.width(4) : responsive.width(3),
         ),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              for (int i = 1; i <= 4; i++)
-                Padding(
-                  padding: EdgeInsets.only(left: responsive.width(2)),
-                  child: GestureDetector(
-                    onTap: () {
-                      if (i == 1) {
-                        Navigator.pushNamed(context, SpiderScreen.routeName);
-                      }
-                      if (i == 2) {
-                        Navigator.pushNamed(context, TheMarvelScreen.routeName);
-                      }
-                    },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: Image.asset(
-                        "assets/images/marvel/image$i.png",
-                        height: responsive.isMobile()
-                            ? responsive.width(90)
-                            : responsive.width(50),
-                        width: responsive.isMobile()
-                            ? responsive.width(60)
-                            : responsive.width(30),
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ),
-                ),
-            ],
+        // Phần hiển thị nội dung theo tab
+        if (_tabController.index == 0)
+          buildTrendingContent(responsive, trendingMovies)
+        else if (_tabController.index == 1)
+          buildTrendingContent(responsive, trendingTVSeries)
+        else if (_tabController.index == 2)
+          buildTrendingContent(responsive, trendingComic)
+        else
+          Center(
+            child: Text(
+              "No data",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: responsive.isMobile()
+                    ? responsive.width(5)
+                    : responsive.width(3.5),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
-        ),
         SizedBox(height: 20),
         Padding(
           padding: EdgeInsets.only(
@@ -228,5 +246,103 @@ class _TrendingWidgetState extends State<TrendingWidget>
         ),
       ],
     );
+  }
+
+  Widget buildTrendingContent(
+      ResponsiveUtil responsive, List<Map<String, dynamic>>? trendingList) {
+    return (trendingList == null
+        ? Center(child: CircularProgressIndicator())
+        : SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: trendingList.asMap().entries.map((entry) {
+                int index = entry.key;
+                Map<String, dynamic> item = entry.value;
+                return Padding(
+                  padding: EdgeInsets.only(left: responsive.width(2)),
+                  child: GestureDetector(
+                    onTap: () {
+                      if (index == 0 && trendingList == trendingTVSeries){
+                         Navigator.pushNamed(context, WhatIfScreen.routeName);
+                      }
+                      else if (index == 1 && trendingList == trendingTVSeries){
+                        Navigator.pushNamed(context, LokiScreen.routeName);
+                      }
+                      else if (index == 0 && trendingList == trendingComic){
+                        Navigator.pushNamed(context, AvengerUnitedScreen.routeName);
+                      }
+                      else if (index == 1 && trendingList == trendingComic){
+                        Navigator.pushNamed(context, MarvelVoiceScreen.routeName);
+                      }
+                      else if (index == 0) {
+                        // Ảnh đầu tiên
+                        Navigator.pushNamed(context, LokiScreen.routeName);
+                      } else if (index == 1) {
+                        // Ảnh thứ hai
+                        Navigator.pushNamed(context, TheMarvelScreen.routeName);
+                      }
+                    },
+                    child: Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Image.network(
+                            item['Image'],
+                            height: responsive.isMobile()
+                                ? responsive.width(90)
+                                : responsive.width(50),
+                            width: responsive.isMobile()
+                                ? responsive.width(60)
+                                : responsive.width(30),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 10),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.black.withOpacity(0.8),
+                                  Colors.black.withOpacity(0.8),
+                                ],
+                              ),
+                              borderRadius: BorderRadius.vertical(
+                                bottom: Radius.circular(15),
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  item['Name'],
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: responsive.isMobile()
+                                        ? responsive.width(5)
+                                        : responsive.width(3.5),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ));
+
   }
 }

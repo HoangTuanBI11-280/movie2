@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:dio/dio.dart'; // Thêm thư viện Dio để gọi API
+import 'package:dio/dio.dart'; 
 import 'package:movie2/helper/responsive.dart';
 import 'package:video_player/video_player.dart';
 

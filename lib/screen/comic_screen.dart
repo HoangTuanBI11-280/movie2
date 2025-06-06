@@ -115,6 +115,7 @@ class _ComicWidgetState extends State<ComicWidget>
           ),
         ),
         TabBar(
+          tabAlignment: TabAlignment.start,
           controller: _tabController,
           labelColor: Color(0xFFF6F5F5),
           unselectedLabelColor: Colors.white.withOpacity(0.5),
@@ -122,9 +123,10 @@ class _ComicWidgetState extends State<ComicWidget>
           dividerColor: Colors.transparent,
           indicator: BoxDecoration(),
           labelStyle: TextStyle(
-            fontSize: responsive.width(3.3),
-            fontWeight: FontWeight.w900,
-          ),
+            fontSize: responsive.isMobile()
+                  ? responsive.width(7)
+                  : responsive.width(4),
+              fontWeight: FontWeight.w900),
           padding: EdgeInsets.only(
               left: responsive.width(0.5)), // Giảm khoảng cách bên trái
           labelPadding: EdgeInsets.symmetric(

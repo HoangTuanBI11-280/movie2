@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:movie2/custom_header.dart';
 import 'package:movie2/helper/color.dart';
+import 'package:movie2/helper/responsive.dart';
 import 'package:movie2/screen/spider_screen.dart';
 
 class MovieScreen extends StatelessWidget {
@@ -81,6 +82,7 @@ class _TrendingWidgetState extends State<TrendingWidget>
 
   @override
   Widget build(BuildContext context) {
+    final responsive = ResponsiveUtil(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -117,8 +119,12 @@ class _TrendingWidgetState extends State<TrendingWidget>
           isScrollable: true,
           dividerColor: Colors.transparent,
           indicator: BoxDecoration(),
-          labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
-          labelPadding: EdgeInsets.only(left: 20),
+          labelStyle: TextStyle(
+              fontSize: responsive.isMobile()
+                  ? responsive.width(7)
+                  : responsive.width(4),
+              fontWeight: FontWeight.w900),
+          labelPadding: EdgeInsets.symmetric(horizontal: responsive.width(2.5)),
           tabs: [
             Tab(
               child: Row(

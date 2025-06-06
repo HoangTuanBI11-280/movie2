@@ -89,9 +89,109 @@
                 ]
             }
         ],
+        "Trending": [
+            {
+                "Type": "Movie",
+                "ID": "tktlafmgm61d1c1mxfrlp13e",
+                "Movie": [
+                    {
+                        "Image": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/images/marvel/image1.png",
+                        "Name": "Spider-Man: Across The Spider-Verse",
+                        "NameK": "spider-man"
+                    },
+                    {
+                        "Image": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/images/marvel/image2.png",
+                        "Name": "The Marvel",
+                        "NameK": "the marvel"
+                    },
+                    {
+                        "Image": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/images/marvel/image3.png",
+                        "Name": "Ant-Man Wasp:Quantumania",
+                        "NameK": "ant-man"
+                    },
+                    {
+                        "Image": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/images/marvel/image4.png",
+                        "Name": "Guardians of the Galaxy",
+                        "NameK": "guardian of the galaxy"
+                    }
+                ]
+            },
+            {
+                "Type": "TV Series",
+                "ID": "q1rdv32mi4ef04aeyt4u6qdl",
+                "TVSeries": [
+                    {
+                        "Image": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/images/marvel/tv1.png",
+                        "Name": "What If",
+                        "NameK": "whatif"
+                    },
+                    {
+                        "Image": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/images/marvel/tv2.png",
+                        "Name": "Loki",
+                        "NameK": "loki"
+                    },
+                    {
+                        "Image": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/images/marvel/tv3.png",
+                        "Name": "Hawkeye",
+                        "NameK": "hawkeye"
+                    },
+                    {
+                        "Image": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/images/marvel/tv4.png",
+                        "Name": "Secret Invasion",
+                        "NameK": "secret invasion"
+                    }
+                ]
+
+            },
+            {
+                "Type": "Comic",
+                "ID": "q1rdv32mi4ef04aeyt4u6qdl",
+                "Comic": [
+                    {
+                        "Image": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/images/marvel/comic1.png",
+                        "Name": "The Avengers United",
+                        "NameK": "the avengers united"
+                    },
+                    {
+                        "Image": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/images/marvel/comic2.png",
+                        "Name": "Marvel's Voices Infinity Comic",
+                        "NameK": "marvel voice"
+                    },
+                    {
+                        "Image": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/images/marvel/comic3.png",
+                        "Name": "Alligator Loki",
+                        "NameK": "alligator loki"
+                    },
+                    {
+                        "Image": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/images/marvel/tv4.png",
+                        "Name": "Marvel Mutt",
+                        "NameK": "marvel mutt"
+                    }
+                ]
+
+            }
+        ],
+        "Coming Soon": [
+            {
+                "ID": "sq04hwnabv0imsjeil9h99v8",
+                "Coming":[
+                    {
+                        "Image": "assets/images/marvel/image5.png",
+                        "Name": "Madame Web"
+                    },
+                    {
+                        "Image": "assets/images/marvel/image6.png",
+                        "Name": "Deadpool & Wolverine"
+                    },
+                    {
+                        "Image": ""
+                    }
+                ]
+            }
+        ],
         "Vid":[
             {
-                "Video": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/draft/spider_sample.mp4",
+                "Video": "https://raw.githubusercontent.com/HoangTuanBI11-280/movie2/refs/heads/main/assets/draft/Presentation3.mp4",
                 "VideoName": "Spider-Man",
                 "VideoID": "8e7cfxr8qxzamrkn9djsgyyv",
                 "VideoUpdate": "01/01/2025",
