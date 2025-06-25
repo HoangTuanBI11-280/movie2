@@ -1,139 +1,50 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:dio/dio.dart';
-import 'package:movie2/helper/responsive.dart';
-import 'package:video_player/video_player.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
+import 'package:movie2/widget/other/pet.dart';
 
-class SpiderMan extends StatefulWidget {
-  @override
-  State<SpiderMan> createState() => _SpiderManState();
-}
+class PetsProvider extends ChangeNotifier {
+  static const apiEndpoint =
+      'https://jatinderji.github.io/users_pets_api/users_pets.json';
 
-class _SpiderManState extends State<SpiderMan> {
-  List<Map<String, dynamic>>? stories;
-  String? videoUrl;
-  VideoPlayerController? _videoController;
-  bool isVideoVisible = false;
+  bool isLoading = true;
+  String error = '';
+  Pets pets = Pets(data: []);
+  Pets serachedPets = Pets(data: []);
+  String searchText = '';
 
-  @override
-  void initState() {
-    super.initState();
-    fetchImages();
-  }
-
-  void fetchImages() async {
+  //
+  getDataFromAPI() async {
     try {
-      var response = await Dio()
-          .get('https://api.jsonbin.io/v3/b/6833e0168960c979a5a12517');
+      Response response = await http.get(Uri.parse(apiEndpoint));
       if (response.statusCode == 200) {
-        setState(() {
-          stories =
-              (response.data['record']['data']['theloai'][0]['Truyen'] as List)
-                  .map<Map<String, dynamic>>(
-                      (story) => story as Map<String, dynamic>)
-                  .toList();
-          videoUrl = response.data['record']['data']['Vid'][0]['Video'];
-        });
+        pets = petFromJson(response.body);
       } else {
-        print("Error: ${response.statusCode}");
+        error = response.statusCode.toString();
       }
     } catch (e) {
-      print("Error fetching images: $e");
+      error = e.toString();
     }
+    isLoading = false;
+    updateData();
   }
 
-  void playVideo() {
-    if (videoUrl != null) {
-      _videoController = VideoPlayerController.network(videoUrl!)
-        ..initialize().then((_) {
-          setState(() {
-            isVideoVisible = true;
-          });
-          _videoController!.play();
-        });
+  updateData() {
+    serachedPets.data.clear();
+    if (searchText.isEmpty) {
+      serachedPets.data.addAll(pets.data);
     } else {
-      print("Video URL is null");
+      serachedPets.data.addAll(pets.data
+          .where((element) =>
+              element.userName.toLowerCase().startsWith(searchText))
+          .toList());
     }
+    notifyListeners();
   }
 
-  void stopVideo() {
-    if (_videoController != null && _videoController!.value.isPlaying) {
-      _videoController!.pause();
-    }
+  search(String username) {
+    searchText = username;
+    updateData();
   }
-
-  void closeVideo() {
-    if (_videoController != null) {
-      _videoController!.dispose();
-      setState(() {
-        _videoController = null;
-        isVideoVisible = false;
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _videoController?.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final responsive = ResponsiveUtil(context);
-
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Nút phát video
-          IconButton(
-            onPressed: playVideo,
-            icon: Icon(
-              Icons.play_circle_outline_outlined,
-              color: Colors.white,
-              size: responsive.isMobile()
-                  ? responsive.width(40)
-                  : responsive.width(20),
-            ),
-          ),
-
-          // Hiển thị video nếu isVideoVisible = true
-          if (isVideoVisible)
-            Center(
-              child: Stack(
-                children: [
-                  AspectRatio(
-                    aspectRatio: _videoController!.value.aspectRatio,
-                    child: VideoPlayer(_videoController!),
-                  ),
-                  Positioned.fill(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            onPressed: () => _videoController!.play(),
-                            icon: Icon(Icons.play_arrow, color: Colors.white),
-                          ),
-                          IconButton(
-                            onPressed: stopVideo,
-                            icon: Icon(Icons.pause, color: Colors.white),
-                          ),
-                          IconButton(
-                            onPressed: closeVideo,
-                            icon: Icon(Icons.close, color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-        ],
-      ),
-    );
-  }
+  //
 }

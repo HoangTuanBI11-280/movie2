@@ -81,6 +81,108 @@ class _SpiderManState extends State<SpiderMan> {
     super.dispose();
   }
 
+  Widget buildCommentSection() {
+    final responsive = ResponsiveUtil(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Bình luận (0)',
+          style: GoogleFonts.leagueGothic(
+            textStyle: TextStyle(
+              fontSize: responsive.isMobile() ? 22 : 28,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                maxLength: 1000,
+                maxLines: null,
+                decoration: InputDecoration(
+                  hintText: 'Viết bình luận',
+                  hintStyle: TextStyle(color: Colors.grey),
+                  filled: true,
+                  fillColor: Color(0xFF2A2A2A),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            SizedBox(width: 10),
+            ElevatedButton(
+              onPressed: () {
+                // TODO: Thêm logic gửi bình luận
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.amber,
+                shape: CircleBorder(),
+              ),
+              child: Icon(Icons.send, color: Colors.black),
+            ),
+          ],
+        ),
+        SizedBox(height: 20),
+        // ...List.generate(3, (index) {
+        //   return Padding(
+        //     padding: const EdgeInsets.only(bottom: 20),
+        //     child: Row(
+        //       crossAxisAlignment: CrossAxisAlignment.start,
+        //       children: [
+        //         CircleAvatar(
+        //           radius: 20,
+        //           backgroundColor: Colors.grey,
+        //           child: Icon(Icons.person, color: Colors.white),
+        //         ),
+        //         SizedBox(width: 10),
+        //         Expanded(
+        //           child: Column(
+        //             crossAxisAlignment: CrossAxisAlignment.start,
+        //             children: [
+        //               Text(
+        //                 'Tên người dùng',
+        //                 style: TextStyle(
+        //                   color: Colors.white,
+        //                   fontWeight: FontWeight.bold,
+        //                 ),
+        //               ),
+        //               SizedBox(height: 5),
+        //               Text(
+        //                 'Đây là bình luận mẫu cho phần giao diện Flutter.',
+        //                 style: TextStyle(color: Colors.grey),
+        //               ),
+        //               SizedBox(height: 5),
+        //               Row(
+        //                 children: [
+        //                   TextButton(
+        //                     onPressed: () {},
+        //                     child: Text('Trả lời',
+        //                         style: TextStyle(color: Colors.amber)),
+        //                   ),
+        //                   TextButton(
+        //                     onPressed: () {},
+        //                     child: Text('Thêm',
+        //                         style: TextStyle(color: Colors.amber)),
+        //                   ),
+        //                 ],
+        //               ),
+        //             ],
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //   );
+        // }),
+      ],
+    );
+  }
   @override
   Widget build(BuildContext context) {
     final responsive = ResponsiveUtil(context);
@@ -267,7 +369,9 @@ class _SpiderManState extends State<SpiderMan> {
                       ],
                     ),
                   ),
+                  buildCommentSection(),
               ],
+              
             ),
           ),
           SizedBox(

@@ -19,6 +19,7 @@ class _TrendingWidgetState extends State<TrendingWidget>
   List<Map<String, dynamic>>? trendingMovies;
   List<Map<String, dynamic>>? trendingTVSeries;
   List<Map<String, dynamic>>? trendingComic;
+  List<Map<String, dynamic>>? coming;
 
   @override
   void initState() {
@@ -50,6 +51,11 @@ class _TrendingWidgetState extends State<TrendingWidget>
           trendingComic = (trendingData.firstWhere(
                   (item) => item['Type'] == 'Comic')['Comic'] as List)
               .map<Map<String, dynamic>>((item) => item as Map<String, dynamic>)
+              .toList();
+          coming = (response.data['record']['data']['Coming Soon'][0]['Coming']
+                  as List)
+              .map<Map<String, dynamic>>(
+                  (story) => story as Map<String, dynamic>)
               .toList();
         });
       } else {
@@ -108,7 +114,7 @@ class _TrendingWidgetState extends State<TrendingWidget>
           isScrollable: true,
           dividerColor: Colors.transparent,
           indicator: BoxDecoration(),
-          labelStyle: TextStyle(
+          labelStyle: GoogleFonts.permanentMarker(
               fontSize: responsive.isMobile()
                   ? responsive.width(7)
                   : responsive.width(4),
@@ -220,30 +226,117 @@ class _TrendingWidgetState extends State<TrendingWidget>
           ),
         ),
         SizedBox(height: 10),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              for (int i = 5; i <= 8; i++)
-                Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: Image.asset(
-                      "assets/images/marvel/image$i.png",
-                      height: responsive.isMobile()
-                          ? responsive.width(90)
-                          : responsive.width(50),
-                      width: responsive.isMobile()
-                          ? responsive.width(60)
-                          : responsive.width(30),
-                      fit: BoxFit.cover,
-                    ),
+        coming == null
+              ? Center(
+                  child:
+                      CircularProgressIndicator()) // Hiển thị khi chờ dữ liệu
+              : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: coming!.map((story) {
+                      return Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Stack(
+                          children: [
+                            // Hình ảnh chính
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Image.network(
+                                story['Image'], // URL hình ảnh
+                                height: responsive.isMobile()
+                                    ? responsive.width(90)
+                                    : responsive.width(50),
+                                width: responsive.isMobile()
+                                    ? responsive.width(60)
+                                    : responsive.width(30),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+
+                            // Nền mờ đen phía dưới
+                            Positioned(
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 10),
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      Colors.black.withOpacity(0.8),
+                                      Colors.black.withOpacity(0.8),
+                                    ],
+                                  ),
+                                  borderRadius: const BorderRadius.vertical(
+                                    bottom: Radius.circular(15),
+                                  ),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    // Tên phụ đề
+                                    Text(
+                                      story['Name'], // Tên truyện
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: responsive.isMobile()
+                                            ? responsive.width(5)
+                                            : responsive.width(3.5),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+
+                                    // Tên chính (ví dụ: Tên phim hoặc tiêu đề phụ)
+                                    // Text(
+                                    //   "Update: ${story['UpdateTime'] ?? "Không rõ"}", // Phụ đề
+                                    //   style: TextStyle(
+                                    //     color: Colors.white70,
+                                    //     fontSize: responsive.isMobile()
+                                    //         ? responsive.width(4)
+                                    //         : responsive.width(2.8),
+                                    //   ),
+                                    //   maxLines: 1,
+                                    //   overflow: TextOverflow.ellipsis,
+                                    // ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
                   ),
                 ),
-            ],
-          ),
-        ),
+        // SingleChildScrollView(
+        //   scrollDirection: Axis.horizontal,
+        //   child: Row(
+        //     children: [
+        //       for (int i = 5; i <= 8; i++)
+        //         Padding(
+        //           padding: EdgeInsets.only(left: 10),
+        //           child: ClipRRect(
+        //             borderRadius: BorderRadius.circular(15),
+        //             child: Image.asset(
+        //               "assets/images/marvel/image$i.png",
+        //               height: responsive.isMobile()
+        //                   ? responsive.width(90)
+        //                   : responsive.width(50),
+        //               width: responsive.isMobile()
+        //                   ? responsive.width(60)
+        //                   : responsive.width(30),
+        //               fit: BoxFit.cover,
+        //             ),
+        //           ),
+        //         ),
+        //     ],
+        //   ),
+        // ),
       ],
     );
   }
@@ -262,21 +355,20 @@ class _TrendingWidgetState extends State<TrendingWidget>
                   padding: EdgeInsets.only(left: responsive.width(2)),
                   child: GestureDetector(
                     onTap: () {
-                      if (index == 0 && trendingList == trendingTVSeries){
-                         Navigator.pushNamed(context, WhatIfScreen.routeName);
-                      }
-                      else if (index == 1 && trendingList == trendingTVSeries){
+                      if (index == 0 && trendingList == trendingTVSeries) {
+                        Navigator.pushNamed(context, WhatIfScreen.routeName);
+                      } else if (index == 1 &&
+                          trendingList == trendingTVSeries) {
                         Navigator.pushNamed(context, LokiScreen.routeName);
-                      }
-                      else if (index == 0 && trendingList == trendingComic){
-                        Navigator.pushNamed(context, AvengerUnitedScreen.routeName);
-                      }
-                      else if (index == 1 && trendingList == trendingComic){
-                        Navigator.pushNamed(context, MarvelVoiceScreen.routeName);
-                      }
-                      else if (index == 0) {
+                      } else if (index == 0 && trendingList == trendingComic) {
+                        Navigator.pushNamed(
+                            context, AvengerUnitedScreen.routeName);
+                      } else if (index == 1 && trendingList == trendingComic) {
+                        Navigator.pushNamed(
+                            context, MarvelVoiceScreen.routeName);
+                      } else if (index == 0) {
                         // Ảnh đầu tiên
-                        Navigator.pushNamed(context, LokiScreen.routeName);
+                        Navigator.pushNamed(context, SpiderScreen.routeName);
                       } else if (index == 1) {
                         // Ảnh thứ hai
                         Navigator.pushNamed(context, TheMarvelScreen.routeName);
@@ -343,6 +435,5 @@ class _TrendingWidgetState extends State<TrendingWidget>
               }).toList(),
             ),
           ));
-
   }
 }

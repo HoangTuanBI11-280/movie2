@@ -10,6 +10,7 @@ import 'package:movie2/screen/game_screen.dart';
 import 'package:movie2/screen/movie_screen.dart';
 import 'package:movie2/screen/tv_show_screen.dart';
 import 'package:movie2/setting/setting_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomHeader extends StatefulWidget {
   final VoidCallback onMenuTap;
@@ -192,11 +193,10 @@ class _CustomHeaderState extends State<CustomHeader> {
               if (widget.title is String)
                 Text(
                   widget.title,
-                  style: TextStyle(
+                  style: GoogleFonts.rubikGemstones(
                     color: Colors.white,
-                    fontFamily: 'ObelixPro-cyr',
                     fontSize: responsive.isMobile()
-                        ? responsive.width(10)
+                        ? responsive.width(12)
                         : responsive.width(10),
                     fontWeight: FontWeight.w500,
                   ),
